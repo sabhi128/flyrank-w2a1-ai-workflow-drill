@@ -248,10 +248,6 @@ html.dark {
   transition: color 0.2s ease;
 }
 
-.input-wrapper input {
-  padding-left: 2.5rem;
-}
-
 input[type="text"],
 input[type="email"],
 textarea {
@@ -266,6 +262,11 @@ textarea {
   box-shadow: var(--shadow-sm);
   box-sizing: border-box;
   transition: all 0.2s ease;
+}
+
+.input-wrapper input[type="text"],
+.input-wrapper input[type="email"] {
+  padding-left: 2.75rem;
 }
 
 input[type="text"]:focus,

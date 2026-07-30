@@ -107,7 +107,9 @@ function App() {
   })
 
   // State for avatar preview, toast notification, and active theme
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(() => {
+    return localStorage.getItem('flyrank_profile_avatar')
+  })
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const [screenReaderAnnouncement, setScreenReaderAnnouncement] = useState('')
 
@@ -173,6 +175,13 @@ function App() {
       // Persist values in localStorage (excluding avatar file object)
       const dataToSave = { ...data, avatar: undefined }
       localStorage.setItem('flyrank_profile_settings', JSON.stringify(dataToSave))
+
+      // Persist avatar base64 data URL if it exists
+      if (avatarPreview) {
+        localStorage.setItem('flyrank_profile_avatar', avatarPreview)
+      } else {
+        localStorage.removeItem('flyrank_profile_avatar')
+      }
 
       // Save simulated success status
       setToast({ type: 'success', message: 'Profile settings updated successfully!' })

@@ -12,7 +12,7 @@ This document compares the outcomes of building a profile settings form twice: f
 
 ## Edge Cases & UX
 - **Round One:** Instant alert box showing "Settings saved!", failing to handle network latency or errors.
-- **Round Two:** Simulates API communication (1.5s delay) with disabled input fields and a loading spinner (`Loader2`). Avatar uploads are fully validated for file size (max 2MB) and MIME type (PNG/JPG/WebP) with dynamic previewing, rather than using simple URL strings. Theme choices toggle global styles via root DOM classes (`html.dark`/`html.light`).
+- **Round Two:** Simulates API communication (1.5s delay) with disabled input fields and a loading spinner (`Loader2`). Avatar uploads are fully validated for file size (max 2MB) and MIME type (PNG/JPG/WebP) with dynamic previewing, rather than using simple URL strings. Theme choices toggle global styles via root DOM classes (`html.dark`/`html.light`). Crucially, settings are persisted in `localStorage` upon successful form submission and reload automatically, providing a complete and functional local app state loop.
 
 ## Review Effort & Time Comparison
 - **Round One (approx. 5 minutes):** Writing the code was fast, but reviewing it revealed numerous bugs, no modularity, and zero test coverage.

@@ -61,6 +61,36 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>
 
+const DEFAULT_SETTINGS: ProfileFormData = {
+  username: 'johndoe',
+  fullName: 'John Doe',
+  email: 'john.doe@example.com',
+  bio: 'Software development intern at FlyRank AI.',
+  theme: 'system',
+  notifications: {
+    email: true,
+    sms: false,
+    push: true,
+  },
+}
+
+const getInitialValues = (): ProfileFormData => {
+  const saved = localStorage.getItem('flyrank_profile_settings')
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved)
+      return {
+        ...DEFAULT_SETTINGS,
+        ...parsed,
+        avatar: undefined, // Clear avatar FileList as files can't be stored in localStorage JSON
+      }
+    } catch (e) {
+      // Fallback to defaults
+    }
+  }
+  return DEFAULT_SETTINGS
+}
+
 function App() {
   // 2. React Hook Form Setup
   const {
@@ -72,18 +102,7 @@ function App() {
     reset,
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      username: 'johndoe',
-      fullName: 'John Doe',
-      email: 'john.doe@example.com',
-      bio: 'Software development intern at FlyRank AI.',
-      theme: 'system',
-      notifications: {
-        email: true,
-        sms: false,
-        push: true,
-      },
-    },
+    defaultValues: getInitialValues(),
     mode: 'onBlur', // validate on field blur
   })
 
@@ -151,6 +170,10 @@ function App() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500))
       
+      // Persist values in localStorage (excluding avatar file object)
+      const dataToSave = { ...data, avatar: undefined }
+      localStorage.setItem('flyrank_profile_settings', JSON.stringify(dataToSave))
+
       // Save simulated success status
       setToast({ type: 'success', message: 'Profile settings updated successfully!' })
       setScreenReaderAnnouncement('Success. Profile settings updated successfully.')
